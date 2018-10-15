@@ -3,6 +3,7 @@ const path = require('path');
 
 const dirPaths = [
     path.join(__dirname, '../_book/'),
+    path.join(__dirname, '../_book/days/'),
 ]
 
 dirPaths.forEach(dirPath => {
