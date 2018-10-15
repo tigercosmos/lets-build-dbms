@@ -1,0 +1,37 @@
+{
+    "title": "Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust ",
+    "description": "",
+    "author": "tigercosmos",
+    "plugins": [
+        "expandable-chapters",
+        "github-buttons@3.0.0",
+        "github",
+        "disqus",
+        "codeblock-filename",
+        "custom-favicon"
+    ],
+    "pluginsConfig": {
+        "github-buttons": {
+            "buttons": [{
+                "user": "tigercosmos",
+                "repo": "lets-build-dbms",
+                "type": "star",
+                "size": "small",
+                "count": true                
+            }, {
+                "user": "tigercosmos",
+                "type": "follow",
+                "width": "180",
+                "size": "small",                
+                "count": true
+            }]
+        },
+        "github": {
+            "url": "https://github.com/tigercosmos/"
+        },
+        "disqus": {
+            "shortName": "lets-build-dbms"
+        },
+        "favicon": "./favicon.ico"
+    }
+}
