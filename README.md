@@ -8,7 +8,7 @@ Database management systems (DBMS) are used in everywhere. There are many DBMSs,
 
 ## Author
 
-Liu, An-Chi (劉安齊). A software engineer, who loves writing code and promoting CS to people. Welcome to follow me at Facebook Page. More information on [Personal Site](https://tigercosmos.xyz/) and [Github](https://github.com/tigercosmos).
+Liu, An-Chi (劉安齊). A software engineer, who loves writing code and promoting CS to people. Welcome to follow me at [Facebook Page](https://www.facebook.com/pg/CodingNeutrino). More information on [Personal Site](https://tigercosmos.xyz/) and [Github](https://github.com/tigercosmos).
 
 ## License
 
