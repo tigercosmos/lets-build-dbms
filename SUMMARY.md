@@ -8,3 +8,4 @@
 * [4: Client/Server Communication Implementation(1)](days/4.md)
 * [5: Introduce to RDBMS and SQL](days/5.md)
 * [6: Client/Server Communication Implementation(2)](days/6.md)
+* [7: SQL Parser](days/7.md)
