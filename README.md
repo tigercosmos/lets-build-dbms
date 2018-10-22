@@ -1,6 +1,6 @@
 # Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust
 
-![Build Status](https://travis-ci.org/tigercosmos/lets-build-dbms.svg?branch=master)
+[![Build Status](https://travis-ci.org/tigercosmos/lets-build-dbms.svg?branch=master)](https://travis-ci.org/tigercosmos/lets-build-dbms)
 
 ## Introduce
 
