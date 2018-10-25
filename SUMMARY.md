@@ -11,3 +11,4 @@
 * [7: SQL Parser](days/7.md)
 * [8: SQL Parser - Lexical Scanner](days/8.md)
 * [9: Lexical Scanner Implementation (1)](days/9.md)
+* [10: Lexical Scanner Implementation (2)](days/10.md)
