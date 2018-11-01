@@ -18,3 +18,4 @@
 * [14: Lexical Scanner Implementation (4)](days/14.md)
 * [15: Lexical Scanner Implementation (5)](days/15.md)
 * [16: Good RDB Design with the Concept of Normal Forms](days/16.md)
+* [17: Parser Implementation (1)](days/17.md)
