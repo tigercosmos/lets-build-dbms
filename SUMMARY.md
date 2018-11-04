@@ -20,3 +20,4 @@
 * [16: Good RDB Design with the Concept of Normal Forms](days/16.md)
 * [17: Parser Implementation (1)](days/17.md)
 * [18: Parser Implementation (2)](days/18.md)
+* [19: Parser Implementation (3): Understand SQL grammar](days/19.md)
