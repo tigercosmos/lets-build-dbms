@@ -22,4 +22,4 @@
 * [18: Parser Implementation (2)](days/18.md)
 * [19: Parser Implementation (3): Understand SQL grammar](days/19.md)
 * [20: Parser Implementation (4)](days/20.md)
-* [21: First Implementation for Database Components)](days/21.md)
+* [21: First Implementation for Database Components](days/21.md)
