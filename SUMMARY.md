@@ -23,3 +23,4 @@
 * [19: Parser Implementation (3): Understand SQL grammar](days/19.md)
 * [20: Parser Implementation (4)](days/20.md)
 * [21: First Implementation for Database Components](days/21.md)
+* [22: Update Components of Database](days/22.md)
