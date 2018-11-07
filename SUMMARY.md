@@ -24,3 +24,4 @@
 * [20: Parser Implementation (4)](days/20.md)
 * [21: First Implementation for Database Components](days/21.md)
 * [22: Update Components of Database](days/22.md)
+* [23: Implement Table `insert_row`](days/23.md)
