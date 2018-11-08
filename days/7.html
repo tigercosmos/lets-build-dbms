@@ -1,0 +1,645 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>7: SQL Parser · Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust </title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="tigercosmos">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-disqus/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="8.html" />
+    
+    
+    <link rel="prev" href="6.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]};
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84804118-5"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-84804118-5');</script>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Let's build a DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="0.html">
+            
+                <a href="0.html">
+            
+                    
+                    0: Introduction to the Series Articles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="1.html">
+            
+                <a href="1.html">
+            
+                    
+                    1: Preparation & Basic Infrastructure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="2.html">
+            
+                <a href="2.html">
+            
+                    
+                    2: Basic Concept of Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="3.html">
+            
+                <a href="3.html">
+            
+                    
+                    3: Frontend/Backend Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="4.html">
+            
+                <a href="4.html">
+            
+                    
+                    4: Client/Server Communication Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="5.html">
+            
+                <a href="5.html">
+            
+                    
+                    5: Introduce to RDBMS and SQL
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="6.html">
+            
+                <a href="6.html">
+            
+                    
+                    6: Client/Server Communication Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.9" data-path="7.html">
+            
+                <a href="7.html">
+            
+                    
+                    7: SQL Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="8.html">
+            
+                <a href="8.html">
+            
+                    
+                    8: SQL Parser - Lexical Scanner
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="9.html">
+            
+                <a href="9.html">
+            
+                    
+                    9: Lexical Scanner Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="10.html">
+            
+                <a href="10.html">
+            
+                    
+                    10: Lexical Scanner Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="11.html">
+            
+                <a href="11.html">
+            
+                    
+                    11: Lexical Scanner Implementation (3)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="12.html">
+            
+                <a href="12.html">
+            
+                    
+                    12: Lexical Scanner Case Study
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="13.html">
+            
+                <a href="13.html">
+            
+                    
+                    13: Recursive Descent Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="14.html">
+            
+                <a href="14.html">
+            
+                    
+                    14: Lexical Scanner Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="15.html">
+            
+                <a href="15.html">
+            
+                    
+                    15: Lexical Scanner Implementation (5)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="16.html">
+            
+                <a href="16.html">
+            
+                    
+                    16: Good RDB Design with the Concept of Normal Forms
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="17.html">
+            
+                <a href="17.html">
+            
+                    
+                    17: Parser Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.20" data-path="18.html">
+            
+                <a href="18.html">
+            
+                    
+                    18: Parser Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.21" data-path="19.html">
+            
+                <a href="19.html">
+            
+                    
+                    19: Parser Implementation (3): Understand SQL grammar
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22" data-path="20.html">
+            
+                <a href="20.html">
+            
+                    
+                    20: Parser Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.23" data-path="21.html">
+            
+                <a href="21.html">
+            
+                    
+                    21: First Implementation for Database Components
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.24" data-path="22.html">
+            
+                <a href="22.html">
+            
+                    
+                    22: Update Components of Database
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.25" data-path="23.html">
+            
+                <a href="23.html">
+            
+                    
+                    23: Implement Table insert_row
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.26" data-path="24.html">
+            
+                <a href="24.html">
+            
+                    
+                    24: Different Client Design of DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >7: SQL Parser</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="7-sql-parser">7: SQL Parser</h1>
+<p>2018/10/22</p>
+<p>Until now, StellarSQL has been able to receive message from and send answer back to clients. That&apos;s good. It is a server, but it still cannot do works of database management.</p>
+<p>Further, only with SQL parser, storage engine, and data engine, StellarSQL could be called a real DBMS.</p>
+<p>These modules should be implemented in order, so let&apos;s talk about the SQL parser first.</p>
+<p>For any message sent from client, it must be a query in SQL format. The query could be &quot;create table&quot;, &quot;insert data&quot;, &quot;delete date&quot;, etc. In order to understand the query, we need a SQL parser.</p>
+<p>Generally speaking, DBMS has a parser includes a lexical scanner and a grammar rule module. The lexical scanner splits the entire query into tokens (keywords or domain name), and the grammar rule module finds a combination of SQL grammar rules that produce this sequence, and process the code associated with those rules.</p>
+<p>For example:</p>
+<pre><code class="lang-sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Customers <span class="hljs-keyword">WHERE</span> Country = <span class="hljs-string">&apos;Mexico&apos;</span>;
+</code></pre>
+<p>The lexical scanner breaks a SQL query above into tokens as:</p>
+<ul>
+<li><code>SELECT</code></li>
+<li><code>*</code></li>
+<li><code>FROM</code></li>
+<li><code>Customers</code></li>
+<li><code>WHERE</code></li>
+<li><code>Country</code></li>
+<li><code>=</code></li>
+<li><code>Mexico</code></li>
+</ul>
+<p>A semicolon means the end of a query, so not it is not counted here.</p>
+<p>Furthermore, the grammar rule module applies rules for these tokens, such as:</p>
+<ul>
+<li><code>SELECT</code> keyword is before columns</li>
+<li><code>From</code> keyword is before tables</li>
+<li><code>Where</code> keyword stands for conditions</li>
+</ul>
+<p>A mature DBMS also does lots of optimizations. As you can imagine, the complexity of a SQL query requires an equally complex structure that efficiently stores the information needed for executing every possible SQL statement.</p>
+<p>For example, according to the book, &quot;<a href="https://www.safaribooksonline.com/library/view/understanding-mysql-internals/0596009577/ch09s02.html" target="_blank">Understanding MySQL Internals</a>&quot;, MySQL optimizer does some important tasks (I just list a few):</p>
+<ul>
+<li><p>Determine which keys can be used to retrieve the records from tables, and choose the best one for each table.</p>
+</li>
+<li><p>Determine the order in which tables should be joined when more than one table is present in the query.</p>
+</li>
+<li><p>Eliminate unused tables from the join.</p>
+</li>
+<li><p>Determine whether keys can be used for ORDER BY and GROUP BY.</p>
+</li>
+</ul>
+<p>In the next days, I am going to implement the SQL parser. However, I am afraid that I could only implement it with basic algorithm. The optimizer is a huge engineering, not to mention my lack of time due to preparing midterm exams.</p>
+<p>The good news is that StellarSQL can parse SQL soon. :)</p>
+<p><strong><em>Reference</em></strong></p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en" target="_blank">MySQL Reference Manual</a></li>
+<li><a href="https://www.safaribooksonline.com/library/view/understanding-mysql-internals/0596009577/ch09.html" target="_blank">Understanding MySQL Internals CH9</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="6.html" class="navigation navigation-prev " aria-label="Previous page: 6: Client/Server Communication Implementation (2)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="8.html" class="navigation navigation-next " aria-label="Next page: 8: SQL Parser - Lexical Scanner">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"7: SQL Parser","level":"1.9","depth":1,"next":{"title":"8: SQL Parser - Lexical Scanner","level":"1.10","depth":1,"path":"days/8.md","ref":"days/8.md","articles":[]},"previous":{"title":"6: Client/Server Communication Implementation (2)","level":"1.8","depth":1,"path":"days/6.md","ref":"days/6.md","articles":[]},"dir":"ltr"},"config":{"plugins":["expandable-chapters","github-buttons@3.0.0","github","disqus","codeblock-filename","custom-favicon"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"disqus":{"useIdentifier":false,"shortName":"lets-build-dbms"},"github":{"url":"https://github.com/tigercosmos/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./favicon.ico","codeblock-filename":{},"github-buttons":{"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]},"custom-favicon":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"tigercosmos","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust ","gitbook":"*","description":""},"file":{"path":"days/7.md","mtime":"2018-11-08T15:59:48.640Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-08T16:00:47.858Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.16.1/URI.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-disqus/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

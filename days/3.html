@@ -1,0 +1,662 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>3: Frontend/Backend Protocol · Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust </title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="tigercosmos">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-disqus/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="4.html" />
+    
+    
+    <link rel="prev" href="2.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]};
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84804118-5"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-84804118-5');</script>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Let's build a DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="0.html">
+            
+                <a href="0.html">
+            
+                    
+                    0: Introduction to the Series Articles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="1.html">
+            
+                <a href="1.html">
+            
+                    
+                    1: Preparation & Basic Infrastructure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="2.html">
+            
+                <a href="2.html">
+            
+                    
+                    2: Basic Concept of Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5" data-path="3.html">
+            
+                <a href="3.html">
+            
+                    
+                    3: Frontend/Backend Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="4.html">
+            
+                <a href="4.html">
+            
+                    
+                    4: Client/Server Communication Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="5.html">
+            
+                <a href="5.html">
+            
+                    
+                    5: Introduce to RDBMS and SQL
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="6.html">
+            
+                <a href="6.html">
+            
+                    
+                    6: Client/Server Communication Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="7.html">
+            
+                <a href="7.html">
+            
+                    
+                    7: SQL Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="8.html">
+            
+                <a href="8.html">
+            
+                    
+                    8: SQL Parser - Lexical Scanner
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="9.html">
+            
+                <a href="9.html">
+            
+                    
+                    9: Lexical Scanner Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="10.html">
+            
+                <a href="10.html">
+            
+                    
+                    10: Lexical Scanner Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="11.html">
+            
+                <a href="11.html">
+            
+                    
+                    11: Lexical Scanner Implementation (3)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="12.html">
+            
+                <a href="12.html">
+            
+                    
+                    12: Lexical Scanner Case Study
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="13.html">
+            
+                <a href="13.html">
+            
+                    
+                    13: Recursive Descent Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="14.html">
+            
+                <a href="14.html">
+            
+                    
+                    14: Lexical Scanner Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="15.html">
+            
+                <a href="15.html">
+            
+                    
+                    15: Lexical Scanner Implementation (5)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="16.html">
+            
+                <a href="16.html">
+            
+                    
+                    16: Good RDB Design with the Concept of Normal Forms
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="17.html">
+            
+                <a href="17.html">
+            
+                    
+                    17: Parser Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.20" data-path="18.html">
+            
+                <a href="18.html">
+            
+                    
+                    18: Parser Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.21" data-path="19.html">
+            
+                <a href="19.html">
+            
+                    
+                    19: Parser Implementation (3): Understand SQL grammar
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22" data-path="20.html">
+            
+                <a href="20.html">
+            
+                    
+                    20: Parser Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.23" data-path="21.html">
+            
+                <a href="21.html">
+            
+                    
+                    21: First Implementation for Database Components
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.24" data-path="22.html">
+            
+                <a href="22.html">
+            
+                    
+                    22: Update Components of Database
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.25" data-path="23.html">
+            
+                <a href="23.html">
+            
+                    
+                    23: Implement Table insert_row
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.26" data-path="24.html">
+            
+                <a href="24.html">
+            
+                    
+                    24: Different Client Design of DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >3: Frontend/Backend Protocol</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="3-frontendbackend-protocol">3: Frontend/Backend Protocol</h1>
+<p>2018/10/18</p>
+<p>StellarSQL is a relational DBMS (RDBMS). Usually, RDBMS is 2-tier client/server architecture, which includes a server and a client. A client might be any devices which wants to access databases, and a server is running a DBMS for handling requests from clients.</p>
+<p>There must be a protocol between client and server, in order to communication and data transmission. MySQL and PostgreSQL apply message stream communication as their protocol. MySQL and PostgreSQL do talk about protocol on their document:</p>
+<ul>
+<li>MySQL: <a href="https://dev.mysql.com/doc/dev/mysql-server/8.0.2/PAGE_PROTOCOL.html" target="_blank">Client/Server Protocol</a></li>
+<li>PostgreSQL: <a href="https://www.postgresql.org/docs/9.5/static/protocol-overview.html#PROTOCOL-MESSAGE-CONCEPTS" target="_blank">Chapter 50. Frontend/Backend Protocol</a></li>
+</ul>
+<p>Of course, you can also use HTTP protocol. Firebase is a NoSQL cloud database, and clients send HTTP requests for querying data. However HTTP is somehow too &quot;fat&quot; for the purpose of data querying, so message stream might be suitable in the case of DBMS.</p>
+<p>Now, we can start to develop a little about Tokio.rs for StellarSQL, which we talked about on yesterday.</p>
+<h2 id="create-server">Create server</h2>
+<p>Based on the reason above, I would also use message stream communication as the protocol for StellarSQL.</p>
+<p>I will think about the detail of the protocol in the following days. But now, we can implement the part of TCP stream by using <code>Tokio.rs</code> first.</p>
+<p>We create a server first:</p>
+<div><p class="code-filename">src/main.rs</p></div>
+<pre><code class="lang-rust">    <span class="hljs-keyword">let</span> addr = <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;127.0.0.1:{}&quot;</span>, port).parse().unwrap();
+
+    <span class="hljs-comment">// Bind a TCP listener to the socket address.</span>
+    <span class="hljs-comment">// Note that this is the Tokio TcpListener, which is fully async.</span>
+    <span class="hljs-keyword">let</span> listener = TcpListener::bind(&amp;addr).unwrap();
+
+    <span class="hljs-comment">// The server task asynchronously iterates over and processes each</span>
+    <span class="hljs-comment">// incoming connection.</span>
+    <span class="hljs-keyword">let</span> server = listener
+        .incoming()
+        .for_each(move |socket| {
+            <span class="hljs-comment">// Spawn a task to process the connection</span>
+            <span class="hljs-comment">// TODO process()</span>
+            <span class="hljs-literal">Ok</span>(())
+        }).map_err(|err| {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;accept error = {:?}&quot;</span>, err);
+        });
+
+    tokio::run(server);
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;StellarSQL running on {} port&quot;</span>, port);
+</code></pre>
+<p>Continue to the day before yesterday, we let address use the port from arguments or configuration. So the server will serve at <code>127.0.0.1:PORT</code>.</p>
+<p>Then we let server listen to any sockets input from connections. For servers or DBMS, it is always that clients ask requests and servers answer responses. So, you could see there is a <code>listener</code> that will handles any sockets, which I remain it as TODO.</p>
+<p>Finally, we run the server with <code>tokio::run(server)</code>. According to the document, the Tokio is a pre-configured &quot;out of the box&quot; runtime for building asynchronous applications. It includes both a reactor and a task scheduler. This means applications are multi-threaded by default. In this case, we just use the default setting by Tokio.</p>
+<h2 id="message">Message</h2>
+<p>I also define the <code>Message</code> for message streaming. The <code>Message</code> struct is really basic and straightforward now. I will finish it and define the protocol in the following days. Then, we could use it for client/server communication later.</p>
+<pre><code class="lang-rust"><span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Message</span></span> {
+    <span class="hljs-comment">/// The TCP socket.</span>
+    socket: TcpStream,
+
+    <span class="hljs-comment">/// Buffer used when reading from the socket. Data is not returned from this</span>
+    <span class="hljs-comment">/// buffer until an entire message has been read.</span>
+    rd: BytesMut,
+
+    <span class="hljs-comment">/// Buffer used to stage data before writing it to the socket.</span>
+    wr: BytesMut,
+}
+
+<span class="hljs-keyword">impl</span> Message {
+    <span class="hljs-comment">/// Create a new `Message` codec backed by the socket</span>
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">new</span></span>(socket: TcpStream) -&gt; <span class="hljs-keyword">Self</span> {
+        Message {
+            socket,
+            rd: BytesMut::new(),
+            wr: BytesMut::new(),
+        }
+    }
+}
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="2.html" class="navigation navigation-prev " aria-label="Previous page: 2: Basic Concept of Server">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="4.html" class="navigation navigation-next " aria-label="Next page: 4: Client/Server Communication Implementation (1)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"3: Frontend/Backend Protocol","level":"1.5","depth":1,"next":{"title":"4: Client/Server Communication Implementation (1)","level":"1.6","depth":1,"path":"days/4.md","ref":"days/4.md","articles":[]},"previous":{"title":"2: Basic Concept of Server","level":"1.4","depth":1,"path":"days/2.md","ref":"days/2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["expandable-chapters","github-buttons@3.0.0","github","disqus","codeblock-filename","custom-favicon"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"disqus":{"useIdentifier":false,"shortName":"lets-build-dbms"},"github":{"url":"https://github.com/tigercosmos/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./favicon.ico","codeblock-filename":{},"github-buttons":{"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]},"custom-favicon":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"tigercosmos","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust ","gitbook":"*","description":""},"file":{"path":"days/3.md","mtime":"2018-11-08T15:59:48.640Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-08T16:00:47.858Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.16.1/URI.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-disqus/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

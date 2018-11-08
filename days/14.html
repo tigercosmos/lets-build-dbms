@@ -1,0 +1,724 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>14: Lexical Scanner Implementation (4) · Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust </title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="tigercosmos">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-disqus/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="15.html" />
+    
+    
+    <link rel="prev" href="13.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]};
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84804118-5"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-84804118-5');</script>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Let's build a DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="0.html">
+            
+                <a href="0.html">
+            
+                    
+                    0: Introduction to the Series Articles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="1.html">
+            
+                <a href="1.html">
+            
+                    
+                    1: Preparation & Basic Infrastructure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="2.html">
+            
+                <a href="2.html">
+            
+                    
+                    2: Basic Concept of Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="3.html">
+            
+                <a href="3.html">
+            
+                    
+                    3: Frontend/Backend Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="4.html">
+            
+                <a href="4.html">
+            
+                    
+                    4: Client/Server Communication Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="5.html">
+            
+                <a href="5.html">
+            
+                    
+                    5: Introduce to RDBMS and SQL
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="6.html">
+            
+                <a href="6.html">
+            
+                    
+                    6: Client/Server Communication Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="7.html">
+            
+                <a href="7.html">
+            
+                    
+                    7: SQL Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="8.html">
+            
+                <a href="8.html">
+            
+                    
+                    8: SQL Parser - Lexical Scanner
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="9.html">
+            
+                <a href="9.html">
+            
+                    
+                    9: Lexical Scanner Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="10.html">
+            
+                <a href="10.html">
+            
+                    
+                    10: Lexical Scanner Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="11.html">
+            
+                <a href="11.html">
+            
+                    
+                    11: Lexical Scanner Implementation (3)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="12.html">
+            
+                <a href="12.html">
+            
+                    
+                    12: Lexical Scanner Case Study
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="13.html">
+            
+                <a href="13.html">
+            
+                    
+                    13: Recursive Descent Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.16" data-path="14.html">
+            
+                <a href="14.html">
+            
+                    
+                    14: Lexical Scanner Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="15.html">
+            
+                <a href="15.html">
+            
+                    
+                    15: Lexical Scanner Implementation (5)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="16.html">
+            
+                <a href="16.html">
+            
+                    
+                    16: Good RDB Design with the Concept of Normal Forms
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="17.html">
+            
+                <a href="17.html">
+            
+                    
+                    17: Parser Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.20" data-path="18.html">
+            
+                <a href="18.html">
+            
+                    
+                    18: Parser Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.21" data-path="19.html">
+            
+                <a href="19.html">
+            
+                    
+                    19: Parser Implementation (3): Understand SQL grammar
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22" data-path="20.html">
+            
+                <a href="20.html">
+            
+                    
+                    20: Parser Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.23" data-path="21.html">
+            
+                <a href="21.html">
+            
+                    
+                    21: First Implementation for Database Components
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.24" data-path="22.html">
+            
+                <a href="22.html">
+            
+                    
+                    22: Update Components of Database
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.25" data-path="23.html">
+            
+                <a href="23.html">
+            
+                    
+                    23: Implement Table insert_row
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.26" data-path="24.html">
+            
+                <a href="24.html">
+            
+                    
+                    24: Different Client Design of DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >14: Lexical Scanner Implementation (4)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="14-lexical-scanner-implementation-4">14: Lexical Scanner Implementation (4)</h1>
+<p>2018/10/29</p>
+<p>I write a scanner to get tokens. The code is at <code>lexer.rs</code>.</p>
+<p>The algorithm is simple. The scanner will read char by char. There are two cursors, <code>cursor_l</code> and <code>cursor_r</code>. When the income char is one of separators or delimiters, the scanner will check the last word selected by two cursors. If the word is a keyword, add the keyword as the token. Otherwise, add the identifier with its name.</p>
+<p>There are some small parts need to fix, but the function is almost done.</p>
+<p>If we have a message:</p>
+<pre><code class="lang-sql"><span class="hljs-keyword">select</span> customername, contactname, address <span class="hljs-keyword">from</span> customers <span class="hljs-keyword">where</span> address <span class="hljs-keyword">is</span> <span class="hljs-literal">null</span>;
+</code></pre>
+<p>then the scanner will get:</p>
+<pre><code class="lang-rust">[
+    Symbol { name: <span class="hljs-string">&quot;select&quot;</span>, len: <span class="hljs-number">6</span>, token: Select, group: Keyword },
+    Symbol { name: <span class="hljs-string">&quot;customername&quot;</span>, len: <span class="hljs-number">12</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;,&quot;</span>, len: <span class="hljs-number">1</span>, token: Comma, group: Delimiter },
+    Symbol { name: <span class="hljs-string">&quot;&quot;</span>, len: <span class="hljs-number">0</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;contactname&quot;</span>, len: <span class="hljs-number">11</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;,&quot;</span>, len: <span class="hljs-number">1</span>, token: Comma, group: Delimiter },
+    Symbol { name: <span class="hljs-string">&quot;&quot;</span>, len: <span class="hljs-number">0</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;address&quot;</span>, len: <span class="hljs-number">7</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;from&quot;</span>, len: <span class="hljs-number">4</span>, token: <span class="hljs-built_in">From</span>, group: Keyword },
+    Symbol { name: <span class="hljs-string">&quot;customers&quot;</span>, len: <span class="hljs-number">9</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;where&quot;</span>, len: <span class="hljs-number">5</span>, token: Where, group: Keyword },
+    Symbol { name: <span class="hljs-string">&quot;address&quot;</span>, len: <span class="hljs-number">7</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;is&quot;</span>, len: <span class="hljs-number">2</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;null&quot;</span>, len: <span class="hljs-number">4</span>, token: Identifier, group: Identifier },
+    Symbol { name: <span class="hljs-string">&quot;;&quot;</span>, len: <span class="hljs-number">1</span>, token: Semicolon, group: Delimiter }
+]
+</code></pre>
+<p><code>is null</code> should be recognized as a token, so I will fix later.</p>
+<p>as you can see, we get the tokens and we can use these token to do the next step.</p>
+<div><p class="code-filename">sql/lexer.rs</p></div>
+<pre><code class="lang-rust"><span class="hljs-keyword">use</span> sql::symbol;
+
+<span class="hljs-meta">#[derive(Debug, Clone)]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Scanner</span></span>&lt;<span class="hljs-symbol">&apos;a</span>&gt; {
+    message: <span class="hljs-built_in">String</span>,
+    tokens: <span class="hljs-built_in">Vec</span>&lt;symbol::Symbol&lt;<span class="hljs-symbol">&apos;a</span>&gt;&gt;,
+    pos: Pos,
+}
+
+<span class="hljs-meta">#[derive(Debug, Clone)]</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Pos</span></span> {
+    cursor_l: usize,
+    cursor_r: usize,
+}
+
+<span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&apos;a</span>&gt; Scanner&lt;<span class="hljs-symbol">&apos;a</span>&gt; {
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">new</span></span>(message: &amp;<span class="hljs-keyword">str</span>) -&gt; Scanner {
+        Scanner {
+            message: message.to_lowercase().trim().to_string(),
+            tokens: <span class="hljs-built_in">vec!</span>[],
+            pos: Pos {
+                cursor_l: <span class="hljs-number">0</span>,
+                cursor_r: <span class="hljs-number">0</span>,
+            },
+        }
+    }
+    <span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">scan_tokens</span></span>(&amp;<span class="hljs-symbol">&apos;a</span> <span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) -&gt; <span class="hljs-built_in">Vec</span>&lt;symbol::Symbol&lt;<span class="hljs-symbol">&apos;a</span>&gt;&gt; {
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Starting scanning message: {}&quot;</span>, <span class="hljs-keyword">self</span>.message);
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> chars = <span class="hljs-keyword">self</span>.message.chars();
+        <span class="hljs-keyword">loop</span> {
+            <span class="hljs-keyword">match</span> chars.next() {
+                <span class="hljs-literal">Some</span>(x) =&gt; {
+                    <span class="hljs-keyword">if</span> is_letter_or_number(x) {
+                        <span class="hljs-keyword">self</span>.pos.cursor_r += <span class="hljs-number">1</span>;
+                    } <span class="hljs-keyword">else</span> {
+                        <span class="hljs-keyword">match</span> x {
+                            <span class="hljs-string">&apos; &apos;</span> | <span class="hljs-string">&apos;\t&apos;</span> | <span class="hljs-string">&apos;\r&apos;</span> | <span class="hljs-string">&apos;\n&apos;</span> | <span class="hljs-string">&apos;(&apos;</span> | <span class="hljs-string">&apos;)&apos;</span> | <span class="hljs-string">&apos;,&apos;</span>
+                            | <span class="hljs-string">&apos;;&apos;</span> =&gt; {
+                                <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.pos.cursor_l != <span class="hljs-keyword">self</span>.pos.cursor_r {
+                                    <span class="hljs-keyword">let</span> word = <span class="hljs-keyword">self</span>
+                                        .message
+                                        .get(
+                                            <span class="hljs-keyword">self</span>.pos.cursor_l
+                                                ..<span class="hljs-keyword">self</span>.pos.cursor_r,
+                                        ).unwrap();
+                                    <span class="hljs-built_in">println!</span>(
+                                        <span class="hljs-string">&quot;encounter `{}`, last word is {}&quot;</span>,
+                                        x, word
+                                    );
+                                    <span class="hljs-keyword">match</span> symbol::SYMBOLS.get(word) {
+                                        <span class="hljs-comment">// either keyword</span>
+                                        <span class="hljs-literal">Some</span>(token) =&gt; {
+                                            <span class="hljs-keyword">self</span>.tokens.push(token.clone())
+                                        }
+                                        <span class="hljs-comment">// or identifier</span>
+                                        <span class="hljs-literal">None</span> =&gt; {
+                                            <span class="hljs-keyword">self</span>.tokens.push(symbol::sym(
+                                                word,
+                                                symbol::Token::Identifier,
+                                                symbol::Group::Identifier,
+                                            ));
+                                        }
+                                    }
+                                    <span class="hljs-keyword">if</span> is_delimiter(x) {
+                                        <span class="hljs-keyword">self</span>.tokens.push(
+                                            symbol::Symbol::match_delimiter(x)
+                                                .unwrap(),
+                                        );
+                                    }
+                                }
+                                <span class="hljs-comment">// set the cursor next to `x` in the right</span>
+                                <span class="hljs-keyword">self</span>.pos.cursor_r += <span class="hljs-number">1</span>;
+                                <span class="hljs-keyword">self</span>.pos.cursor_l = <span class="hljs-keyword">self</span>.pos.cursor_r;
+                            }
+                            _ =&gt; {
+                                <span class="hljs-comment">// error</span>
+                            }
+                        }
+                    }
+                }
+                <span class="hljs-comment">// no remaining char in message</span>
+                <span class="hljs-literal">None</span> =&gt; <span class="hljs-keyword">break</span>,
+            };
+        }
+        <span class="hljs-keyword">self</span>.tokens.clone()
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">is_letter_or_number</span></span>(ch: <span class="hljs-keyword">char</span>) -&gt; <span class="hljs-keyword">bool</span> {
+    ch.is_digit(<span class="hljs-number">10</span>) || ch.is_ascii_alphabetic()
+}
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">is_delimiter</span></span>(ch: <span class="hljs-keyword">char</span>) -&gt; <span class="hljs-keyword">bool</span> {
+    ch == <span class="hljs-string">&apos;(&apos;</span> || ch == <span class="hljs-string">&apos;)&apos;</span> || ch == <span class="hljs-string">&apos;,&apos;</span> || ch == <span class="hljs-string">&apos;;&apos;</span>
+}
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="13.html" class="navigation navigation-prev " aria-label="Previous page: 13: Recursive Descent Parser">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="15.html" class="navigation navigation-next " aria-label="Next page: 15: Lexical Scanner Implementation (5)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"14: Lexical Scanner Implementation (4)","level":"1.16","depth":1,"next":{"title":"15: Lexical Scanner Implementation (5)","level":"1.17","depth":1,"path":"days/15.md","ref":"days/15.md","articles":[]},"previous":{"title":"13: Recursive Descent Parser","level":"1.15","depth":1,"path":"days/13.md","ref":"days/13.md","articles":[]},"dir":"ltr"},"config":{"plugins":["expandable-chapters","github-buttons@3.0.0","github","disqus","codeblock-filename","custom-favicon"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"disqus":{"useIdentifier":false,"shortName":"lets-build-dbms"},"github":{"url":"https://github.com/tigercosmos/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./favicon.ico","codeblock-filename":{},"github-buttons":{"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]},"custom-favicon":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"tigercosmos","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust ","gitbook":"*","description":""},"file":{"path":"days/14.md","mtime":"2018-11-08T15:59:48.640Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-08T16:00:47.858Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.16.1/URI.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-disqus/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

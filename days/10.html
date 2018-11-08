@@ -1,0 +1,722 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>10: Lexical Scanner Implementation (2) · Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust </title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="tigercosmos">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-disqus/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="11.html" />
+    
+    
+    <link rel="prev" href="9.html" />
+    
+
+    <style>
+    @media only screen and (max-width: 640px) {
+        .book-header .hidden-mobile {
+            display: none;
+        }
+    }
+    </style>
+    <script>
+        window["gitbook-plugin-github-buttons"] = {"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]};
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84804118-5"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-84804118-5');</script>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Let's build a DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="0.html">
+            
+                <a href="0.html">
+            
+                    
+                    0: Introduction to the Series Articles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="1.html">
+            
+                <a href="1.html">
+            
+                    
+                    1: Preparation & Basic Infrastructure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="2.html">
+            
+                <a href="2.html">
+            
+                    
+                    2: Basic Concept of Server
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="3.html">
+            
+                <a href="3.html">
+            
+                    
+                    3: Frontend/Backend Protocol
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="4.html">
+            
+                <a href="4.html">
+            
+                    
+                    4: Client/Server Communication Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="5.html">
+            
+                <a href="5.html">
+            
+                    
+                    5: Introduce to RDBMS and SQL
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="6.html">
+            
+                <a href="6.html">
+            
+                    
+                    6: Client/Server Communication Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="7.html">
+            
+                <a href="7.html">
+            
+                    
+                    7: SQL Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="8.html">
+            
+                <a href="8.html">
+            
+                    
+                    8: SQL Parser - Lexical Scanner
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="9.html">
+            
+                <a href="9.html">
+            
+                    
+                    9: Lexical Scanner Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.12" data-path="10.html">
+            
+                <a href="10.html">
+            
+                    
+                    10: Lexical Scanner Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="11.html">
+            
+                <a href="11.html">
+            
+                    
+                    11: Lexical Scanner Implementation (3)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="12.html">
+            
+                <a href="12.html">
+            
+                    
+                    12: Lexical Scanner Case Study
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="13.html">
+            
+                <a href="13.html">
+            
+                    
+                    13: Recursive Descent Parser
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="14.html">
+            
+                <a href="14.html">
+            
+                    
+                    14: Lexical Scanner Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="15.html">
+            
+                <a href="15.html">
+            
+                    
+                    15: Lexical Scanner Implementation (5)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="16.html">
+            
+                <a href="16.html">
+            
+                    
+                    16: Good RDB Design with the Concept of Normal Forms
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="17.html">
+            
+                <a href="17.html">
+            
+                    
+                    17: Parser Implementation (1)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.20" data-path="18.html">
+            
+                <a href="18.html">
+            
+                    
+                    18: Parser Implementation (2)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.21" data-path="19.html">
+            
+                <a href="19.html">
+            
+                    
+                    19: Parser Implementation (3): Understand SQL grammar
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22" data-path="20.html">
+            
+                <a href="20.html">
+            
+                    
+                    20: Parser Implementation (4)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.23" data-path="21.html">
+            
+                <a href="21.html">
+            
+                    
+                    21: First Implementation for Database Components
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.24" data-path="22.html">
+            
+                <a href="22.html">
+            
+                    
+                    22: Update Components of Database
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.25" data-path="23.html">
+            
+                <a href="23.html">
+            
+                    
+                    23: Implement Table insert_row
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.26" data-path="24.html">
+            
+                <a href="24.html">
+            
+                    
+                    24: Different Client Design of DBMS
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >10: Lexical Scanner Implementation (2)</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="10-lexical-scanner-implementation-2">10: Lexical Scanner Implementation (2)</h1>
+<p>2018/10/25</p>
+<p>I modify some part that I wrote yesterday.</p>
+<div><p class="code-filename">src/sql/symbol.rs</p></div>
+<pre><code class="lang-rust"><span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Symbol</span></span>&lt;<span class="hljs-symbol">&apos;a</span>&gt; {
+    name: &amp;<span class="hljs-symbol">&apos;a</span> <span class="hljs-keyword">str</span>,
+    len: usize,
+    token: Token,
+    group: Group,
+}
+</code></pre>
+<p>I change <code>Symbol.name</code> from <code>String</code> to <code>&amp;str</code> type, because <code>String</code> type stores data in the heap and <code>&amp;str</code> stores at the stack. There is no reason we should store <code>name</code> in heap, since <code>name</code> is a fixed value and put it in the stack would be faster.</p>
+<p>You would notice the <code>&lt;&apos;a&gt;</code> syntax, it is the lifetime syntax in rust. The <code>&amp;str</code> usually live only in the scope, so I need to tell the compiler that <code>name</code> should live as long as <code>Symbol</code>.</p>
+<div><p class="code-filename">src/sql/symbol.rs</p></div>
+<pre><code class="lang-rust"><span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Group</span></span> {
+    DataType,
+    DoubleKeyword,
+    MultiKeyword,
+    Function,
+    Keyword,
+}
+</code></pre>
+<p>I add more enums in <code>Group</code>, where <code>DataType</code> includes <code>Int</code>, <code>Char</code>, etc., and <code>DoubleKeyword</code> means the a two-word keywords.</p>
+<div><p class="code-filename">src/sql/symbol.rs</p></div>
+<pre><code class="lang-rust"><span class="hljs-keyword">pub</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Token</span></span> {
+    <span class="hljs-comment">/* SQL Keywords */</span>
+
+    <span class="hljs-comment">//...</span>
+    <span class="hljs-comment">//...</span>
+
+    <span class="hljs-comment">/* SQL Function */</span>
+    AVG,
+    COUNT,
+    MAX,
+    MIN,
+    SUM,
+
+    <span class="hljs-comment">/* SQL Data Type */</span>
+    Char,
+    Double,
+    Float,
+    Int,
+    Varchar,
+}
+</code></pre>
+<p>I update struct <code>Token</code>. There is only <code>Keywords</code> part yesterday, and I fill up <code>Function</code> and <code>Data Type</code>. I just plan to implement <code>Functions</code> and <code>Data Type</code> listed in <code>Token</code>, though other DBMS implement more.</p>
+<p>You might wonder what is the difference between <code>Varchar</code> and <code>Char</code>. According to MySQL document, the <code>Char</code> and <code>Varchar</code> types are similar, but differ in the way they are stored and retrieved. They also differ in maximum length and in whether trailing spaces are retained.</p>
+<p>The <code>Char</code> and <code>Varchar</code> types are declared with a length that indicates the maximum number of characters you want to store. For example, <code>CHAR(30)</code> can hold up to <code>30</code> characters.</p>
+<p>The table shows the difference.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>CHAR(4)</th>
+<th style="text-align:center">Storage Required</th>
+<th>VARCHAR(4)</th>
+<th style="text-align:center">Storage Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&apos;&apos;</td>
+<td>&apos;    &apos;</td>
+<td style="text-align:center">4 bytes</td>
+<td>&apos;&apos;</td>
+<td style="text-align:center">1 byte</td>
+</tr>
+<tr>
+<td>&apos;ab&apos;</td>
+<td>&apos;ab  &apos;</td>
+<td style="text-align:center">4 bytes</td>
+<td>&apos;ab&apos;</td>
+<td style="text-align:center">3 bytes</td>
+</tr>
+<tr>
+<td>&apos;abcd&apos;</td>
+<td>&apos;abcd&apos;</td>
+<td style="text-align:center">4 bytes</td>
+<td>&apos;abcd&apos;</td>
+<td style="text-align:center">5 bytes</td>
+</tr>
+<tr>
+<td>&apos;abcdefgh&apos;</td>
+<td>&apos;abcd&apos;</td>
+<td style="text-align:center">4 bytes</td>
+<td>&apos;abcd&apos;</td>
+<td style="text-align:center">5 bytes</td>
+</tr>
+</tbody>
+</table>
+<div><p class="code-filename">src/sql/symbol.rs</p></div>
+<pre><code class="lang-rust">lazy_static! {
+    <span class="hljs-comment">/// A static struct of token hashmap storing all tokens</span>
+    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">ref</span> SYMBOLS: HashMap&lt;&amp;<span class="hljs-symbol">&apos;static</span> <span class="hljs-keyword">str</span>, Symbol&lt;<span class="hljs-symbol">&apos;static</span>&gt;&gt; = {
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> m = HashMap::new();
+
+        <span class="hljs-comment">// The following is maintained by hand according to `Token`</span>
+        <span class="hljs-comment">/* SQL Keywords */</span>
+        m.insert(<span class="hljs-string">&quot;add&quot;</span>, sym(<span class="hljs-string">&quot;add&quot;</span>, Token::Add, Group::Keyword));
+        m.insert(
+            <span class="hljs-string">&quot;add constraint&quot;</span>,
+            sym(<span class="hljs-string">&quot;add constraint&quot;</span>, Token::AddConstraint, Group::Keyword),
+        );
+
+        <span class="hljs-comment">// ...</span>
+        <span class="hljs-comment">// ...</span>
+        <span class="hljs-comment">// ...</span>
+
+        m <span class="hljs-comment">// return m</span>
+    };
+}
+</code></pre>
+<p>I store all <code>Symbol</code> to <code>SYMBOLS</code> hashmap for later use by the scanner.</p>
+<p>In C++, we can define and export a list, an array, or a map with value. Other file could simply <code>include</code> the <code>.h</code> or <code>.cc</code> to use the exported variable.</p>
+<p>However in Rust, we cannot do that without crates help (crate is a third party module). So, I use <code>lazy_static</code> here, it helps us to export the hashmap just like C++. Using the macro <code>lazy_static!</code> (You could see a macro as a decorator in Rust), it is possible to have statics that require code to be executed at runtime in order to be initialized.</p>
+<p>Note that the lifetime of the <code>SYMBOLS</code> should be <code>static</code>, which mean it and its content should live in the whole life of the program. So, you could see the type is <code>HashMap&lt;&amp;&apos;static str, Symbol&lt;&apos;static&gt;&gt;</code>.</p>
+<p>All that remains to do are lots of &quot;dirty works&quot;. As you could see, I need to <code>insert</code> all <code>Symbol</code> in <code>SYMBOLS</code>. This is a boring job by hand, but I still need to that. (Of course I write a simple script to make it easier)</p>
+<p>Today commits:</p>
+<ul>
+<li><code>74adcd01220e3b73947dcfa1d6ff83101953f843</code> sql: update Symbol, Group, Token. Implement SYMBOLS</li>
+<li><code>46a3ce29ab482197baebceb4197502e46e17b8ac</code> travis: add cargo test</li>
+<li><code>1257a38bdcb0f76e76f00ac70c5d5a4773462c1b</code> crate: add lazy_static</li>
+<li><code>7bf3f54b8ef0a6cfd3803d646fe7bb42a9d93307</code> sql: let symbol pub</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="9.html" class="navigation navigation-prev " aria-label="Previous page: 9: Lexical Scanner Implementation (1)">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="11.html" class="navigation navigation-next " aria-label="Next page: 11: Lexical Scanner Implementation (3)">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"10: Lexical Scanner Implementation (2)","level":"1.12","depth":1,"next":{"title":"11: Lexical Scanner Implementation (3)","level":"1.13","depth":1,"path":"days/11.md","ref":"days/11.md","articles":[]},"previous":{"title":"9: Lexical Scanner Implementation (1)","level":"1.11","depth":1,"path":"days/9.md","ref":"days/9.md","articles":[]},"dir":"ltr"},"config":{"plugins":["expandable-chapters","github-buttons@3.0.0","github","disqus","codeblock-filename","custom-favicon"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"disqus":{"useIdentifier":false,"shortName":"lets-build-dbms"},"github":{"url":"https://github.com/tigercosmos/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./favicon.ico","codeblock-filename":{},"github-buttons":{"buttons":[{"user":"tigercosmos","repo":"lets-build-dbms","type":"star","size":"small","count":true},{"user":"tigercosmos","type":"follow","width":"180","size":"small","count":true}]},"custom-favicon":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"tigercosmos","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Let's build a DBMS: StellarSQL -- a minimal SQL DBMS written in Rust ","gitbook":"*","description":""},"file":{"path":"days/10.md","mtime":"2018-11-08T15:59:48.640Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-08T16:00:47.858Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github-buttons/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.16.1/URI.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-disqus/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
