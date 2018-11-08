@@ -25,3 +25,4 @@
 * [21: First Implementation for Database Components](days/21.md)
 * [22: Update Components of Database](days/22.md)
 * [23: Implement Table `insert_row`](days/23.md)
+* [24: Different Client Design of DBMS](days/24.md)
